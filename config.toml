@@ -1,0 +1,19 @@
+schema_version = 2
+
+[theme]
+preset = "glass"
+
+[[extensions]]
+id = "dev.rill.aiusage"
+path = "."
+grant = []
+
+[[edge_widgets]]
+id = "ai-usage"
+extension = "dev.rill.aiusage"
+contribution = "ai-usage"
+display = "primary"
+edge = "right"
+thickness = 64
+length = 312
+auto_collapse = true

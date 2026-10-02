@@ -1,0 +1,48 @@
+schema_version = 2
+
+[theme]
+preset = "glass"
+
+[[modules]]
+id = "title"
+kind = "text"
+text = "Rill + RillNotch + RillAIUsage"
+
+[[modules]]
+id = "clock"
+kind = "clock"
+format = "EEE d MMM HH:mm"
+
+[[surfaces]]
+id = "top"
+edge = "top"
+display = "primary"
+start = ["title"]
+end = ["clock"]
+
+[[extensions]]
+id = "dev.rill.notch"
+path = "../RillNotch"
+grant = ["actions"]
+
+[[notch_widgets]]
+id = "rill-notch"
+extension = "dev.rill.notch"
+contribution = "now-playing"
+display = "primary"
+background_style = "black"
+
+[[extensions]]
+id = "dev.rill.aiusage"
+path = "."
+grant = []
+
+[[edge_widgets]]
+id = "ai-usage"
+extension = "dev.rill.aiusage"
+contribution = "ai-usage"
+display = "primary"
+edge = "right"
+thickness = 64
+length = 312
+auto_collapse = true

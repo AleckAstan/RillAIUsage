@@ -1,0 +1,10 @@
+[extension]
+api_version = 2
+id = "dev.rill.aiusage"
+name = "RillAIUsage"
+executable = "./.build/release/RillAIUsage"
+requested_capabilities = []
+
+[[extension.contributions]]
+id = "ai-usage"
+kind = "edgeWidget"
