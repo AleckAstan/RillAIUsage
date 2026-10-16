@@ -11,5 +11,5 @@ cp -R "$root/Resources" "$stage/"
 cp -R "$root/ThirdParty" "$stage/"
 archive="$root/.build/releases/rill-plugin-macos-arm64.zip"
 ditto -c -k "$stage" "$archive"
-shasum -a 256 "$archive" > "$archive.sha256"
+(cd "$root/.build/releases" && shasum -a 256 rill-plugin-macos-arm64.zip > rill-plugin-macos-arm64.zip.sha256)
 echo "$archive"
