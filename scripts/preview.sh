@@ -2,7 +2,7 @@
 set -euo pipefail
 project_root="$(cd "$(dirname "$0")/.." && pwd)"
 rill_app="$project_root/../Rill/.build/DerivedData/Build/Products/Debug/Rill.app"
-if [[ ! -x "$rill_app/Contents/MacOS/Rill" || ! -x "$project_root/.build/release/RillAIUsage" ]]; then
+if [[ ! -x "$rill_app/Contents/MacOS/Rill" || ! -x "$project_root/bin/RillAIUsage" ]]; then
     echo 'Build Rill and RillAIUsage first.' >&2
     exit 1
 fi

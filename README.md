@@ -11,9 +11,57 @@ from both panel and card folds it again after 260 ms. Rill owns
 the native windows, contour, animation, input and accessibility; this package
 owns credentials access, service requests and the three provider readings.
 
+
+## Install from GitHub
+
+Requires the Rill build with `rillctl install`, macOS 14+ and Apple Silicon.
+Review this repository before installing: an extension runs as your user.
+No Xcode or sibling Rill checkout is needed for the release archive.
+
+```sh
+rillctl install https://github.com/AleckAstan/RillAIUsage/releases/tag/v0.1.0
+```
+
+Copy the tables from `config.toml` into your Rill configuration and replace
+`path = "."` with:
+
+```toml
+path = "https://github.com/AleckAstan/RillAIUsage/releases/tag/v0.1.0"
+```
+
+Keep `schema_version = 2`, the capability grants and your existing surfaces.
+Run `rillctl validate --config PATH`, then `rillctl reload`.
+A repository URL without `/releases/tag/v0.1.0` installs the latest release.
+Installation never overwrites an existing package; use a new tag to upgrade
+and keep the previous URL to roll back. Configuration validation is offline.
+Downloaded packages live under
+`~/Library/Application Support/Rill/packages/aleckastan/rillaiusage/`.
+Local paths remain supported. Release binaries are development artifacts,
+without Developer ID signing or notarization.
+
+## Distribution
+
+The Swift package fetches the versioned Rill SDK from GitHub. For local SDK
+work, set `RILL_SDK_PATH` to an absolute Rill checkout path. Build and package:
+
+```sh
+./scripts/release.sh
+```
+
+The archive `.build/releases/rill-plugin-macos-arm64.zip` contains
+`extension.toml`, `bin/RillAIUsage`, sample configuration, documentation and the
+required resources and license notices. It excludes local account settings,
+credentials, cached artwork and wallpaper previews. Upload the archive and
+its `.sha256` sidecar to a GitHub release with the matching source tag:
+
+```sh
+gh release create v0.1.0 .build/releases/rill-plugin-macos-arm64.zip .build/releases/rill-plugin-macos-arm64.zip.sha256 --title v0.1.0 --notes "Initial Rill extension release"
+```
+
+
 ## Build
 
-Keep `RillAIUsage`, `Rill` and optionally `RillNotch` beside each other.
+For the host preview commands below, keep `RillAIUsage`, `Rill` and optionally `RillNotch` beside each other. The extension itself builds independently.
 Requires macOS 14+, Swift 6 and the Rill revision containing `edge_widgets`
 and the semantic `metric` node. Older Rill builds cannot load this extension.
 
@@ -42,12 +90,12 @@ Rill instance. For a fully synthetic preview, launch Rill with
 ## Add to an existing bar and notch
 
 Keep the existing surfaces and notch widgets. Set `schema_version = 2`, then
-add these tables with the absolute path to this package:
+add these tables with the GitHub release URL:
 
 ```toml
 [[extensions]]
 id = "dev.rill.aiusage"
-path = "/absolute/path/to/RillAIUsage"
+path = "https://github.com/AleckAstan/RillAIUsage/releases/tag/v0.1.0"
 grant = []
 
 [[edge_widgets]]
@@ -107,7 +155,7 @@ selection and report an error; an invalid file at startup stops the plugin.
 
 ### Connect accounts
 
-Run `.build/release/RillAIUsage --check` to print a usage-only diagnostic.
+Run `bin/RillAIUsage --check` to print a usage-only diagnostic.
 Credentials never appear in this output. Refreshes run every 60 seconds,
 respect HTTP rate-limit delays and retain the last good reading with its age
 when a service becomes unavailable. Unknown readings show `?`, never a fake
@@ -116,13 +164,13 @@ zero. The plugin does not refresh tokens or change existing credentials.
 - **Claude:** reads the existing Claude Code `.credentials.json` or login
   keychain item. `CLAUDE_CONFIG_DIR` is supported, including the hashed keychain
   service name. If keychain access needs authorization, run
-  `.build/release/RillAIUsage --connect-claude` and approve the macOS prompt.
+  `bin/RillAIUsage --connect-claude` and approve the macOS prompt.
   Sign in with Claude Code first if no credentials exist. Background polling
   never opens a keychain authorization prompt.
 - **Codex:** reads the existing `auth.json` under `CODEX_HOME` or `~/.codex`
   and requests the account session and weekly usage windows. Sign in with
   Codex first if no session is available.
-- **Perplexity:** run `.build/release/RillAIUsage --connect-perplexity`, sign
+- **Perplexity:** run `bin/RillAIUsage --connect-perplexity`, sign
   in in the dedicated WebKit window, then close it. The extension uses that
   WebKit session to query the same-origin rate-limit endpoint. The live
   response supplies remaining counts without a total, so the label reads
